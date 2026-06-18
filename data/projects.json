@@ -1,0 +1,130 @@
+[
+  {
+    "id": "skf-automotive-plant",
+    "title": "SKF Automotive Component Factory",
+    "category": "Automobile",
+    "image": "/images/projects/proj1.jpg",
+    "description": "High-precision manufacturing facility designed with vibration-isolated heavy foundations and overhead crane support structures.",
+    "location": "Chennai, Tamil Nadu",
+    "client": "SKF India Limited",
+    "completionYear": "2024",
+    "features": ["120,000 Sq. Ft. Floor Area", "25 Ton Overhead Crane Girders", "Laser-guided flat flooring", "Acoustic insulated panels"],
+    "gallery": [
+      "/images/projects/proj1.jpg",
+      "/images/projects/proj1_inside.jpg",
+      "/images/projects/proj1_steel.jpg"
+    ]
+  },
+  {
+    "id": "blue-star-cold-chain",
+    "title": "Blue Star Multi-Chamber Cold Storage",
+    "category": "Cold Storage",
+    "image": "/images/projects/proj2.jpg",
+    "description": "Temperature-controlled automated cold chain warehouse engineered with high-density PIR panels and hermetic expansion joints.",
+    "location": "Pune, Maharashtra",
+    "client": "Blue Star Cold Logistics",
+    "completionYear": "2023",
+    "features": ["-25°C Ultra-Low Freezers", "150mm PIR Sandwich Panels", "Under-floor air heating", "Sub-zero backup generators"],
+    "gallery": [
+      "/images/projects/proj2.jpg",
+      "/images/projects/proj2_racks.jpg",
+      "/images/projects/proj2_insulation.jpg"
+    ]
+  },
+  {
+    "id": "jsw-steel-shed",
+    "title": "JSW Heavy Engineering Fabrication Shed",
+    "category": "Industrial",
+    "image": "/images/projects/proj3.jpg",
+    "description": "Massive high-clearance engineering shed supporting heavy CNC machinery and industrial steel fabrication lines.",
+    "location": "Bellary, Karnataka",
+    "client": "JSW Steel Co.",
+    "completionYear": "2025",
+    "features": ["35m Clear Height", "Double-tier crane rails (50T/20T)", "Seismic Zone 3 compliance", "Shotblast coating rooms"],
+    "gallery": [
+      "/images/projects/proj3.jpg",
+      "/images/projects/proj3_erection.jpg",
+      "/images/projects/proj3_roof.jpg"
+    ]
+  },
+  {
+    "id": "reliance-logistics-hub",
+    "title": "Reliance Smart Distribution Center",
+    "category": "Logistics",
+    "image": "/images/projects/proj4.jpg",
+    "description": "High-throughput logistics warehouse featuring 36 automated loading docks, fire sprinkler systems, and mezzanine management offices.",
+    "location": "Jhajjar, Haryana",
+    "client": "Reliance Retail Ventures",
+    "completionYear": "2024",
+    "features": ["450,000 Sq. Ft. footprint", "36 Hydraulic Dock Levelers", "ESFR Fire Protection System", "Daylight harvesting skylights"],
+    "gallery": [
+      "/images/projects/proj4.jpg",
+      "/images/projects/proj4_docks.jpg",
+      "/images/projects/proj4_night.jpg"
+    ]
+  },
+  {
+    "id": "arvind-textile-mill",
+    "title": "Arvind Composite Textile Spinning Mill",
+    "category": "Textile",
+    "image": "/images/projects/proj5.jpg",
+    "description": "State-of-the-art weaving and spinning mill with advanced humidity control ducts and custom truss designs for long spans.",
+    "location": "Ahmedabad, Gujarat",
+    "client": "Arvind Mills Group",
+    "completionYear": "2022",
+    "features": ["Double span PEB frames", "Integrated HVAC ducting", "Dust extraction vents", "Anti-static epoxy floor"],
+    "gallery": [
+      "/images/projects/proj5.jpg",
+      "/images/projects/proj5_looms.jpg",
+      "/images/projects/proj5_exterior.jpg"
+    ]
+  },
+  {
+    "id": "tata-motors-warehouse",
+    "title": "Tata Motors EV Assembly Plant",
+    "category": "Automobile",
+    "image": "/images/projects/proj6.jpg",
+    "description": "Eco-friendly EV assembly warehouse containing roof-mounted solar grids and overhead electrical monorail systems.",
+    "location": "Sanand, Gujarat",
+    "client": "Tata Motors Passenger Vehicles",
+    "completionYear": "2025",
+    "features": ["LEED Gold Certified", "1.2 MW Roof Solar Array", "Automated AGV guide tracks", "Reinforced steel columns"],
+    "gallery": [
+      "/images/projects/proj6.jpg",
+      "/images/projects/proj6_solar.jpg",
+      "/images/projects/proj6_assembly.jpg"
+    ]
+  },
+  {
+    "id": "hl-logistics-warehouse",
+    "title": "Hindustan Logistics Mega Warehouse",
+    "category": "Warehouse",
+    "image": "/images/projects/proj7.jpg",
+    "description": "Double-span PEB steel building designed for heavy-stack pallets and distribution logistics.",
+    "location": "Kolkata, West Bengal",
+    "client": "Hindustan Logistics Corp.",
+    "completionYear": "2023",
+    "features": ["Steel fiber concrete floors", "24/7 loading ventilation", "Multi-tier shelving systems", "Rust-proof steel cladding"],
+    "gallery": [
+      "/images/projects/proj7.jpg",
+      "/images/projects/proj7_shelves.jpg",
+      "/images/projects/proj7_front.jpg"
+    ]
+  },
+  {
+    "id": "isro-clean-room",
+    "title": "ISRO Aerospace Satellite Integration Hangar",
+    "category": "Industrial",
+    "image": "/images/projects/proj8.jpg",
+    "description": "Ultra-clean space integration hangar built with massive column-free clearances and specialized particulate filtration systems.",
+    "location": "Sriharikota, Andhra Pradesh",
+    "client": "ISRO (Indian Space Research Organisation)",
+    "completionYear": "2024",
+    "features": ["Class 10,000 Clean Room Area", "70m column-free clear span", "High-velocity foam deluge", "EMI shielded walls"],
+    "gallery": [
+      "/images/projects/proj8.jpg",
+      "/images/projects/proj8_cleanroom.jpg",
+      "/images/projects/proj8_truss.jpg"
+    ]
+  }
+]

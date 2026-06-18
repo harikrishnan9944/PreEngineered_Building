@@ -1,0 +1,65 @@
+[
+  {
+    "id": "gal1",
+    "title": "Automated Steel Plate Cutting",
+    "category": "Fabrication",
+    "image": "/images/gallery/gal1.jpg",
+    "size": "medium"
+  },
+  {
+    "id": "gal2",
+    "title": "PEB Primary Frame Erection",
+    "category": "Erection",
+    "image": "/images/gallery/gal2.jpg",
+    "size": "large"
+  },
+  {
+    "id": "gal3",
+    "title": "Finished Automotive Factory Layout",
+    "category": "Factory",
+    "image": "/images/gallery/gal3.jpg",
+    "size": "small"
+  },
+  {
+    "id": "gal4",
+    "title": "Robotic Welding Line",
+    "category": "Fabrication",
+    "image": "/images/gallery/gal4.jpg",
+    "size": "large"
+  },
+  {
+    "id": "gal5",
+    "title": "Truss Roof Frame Lifting",
+    "category": "Erection",
+    "image": "/images/gallery/gal5.jpg",
+    "size": "medium"
+  },
+  {
+    "id": "gal6",
+    "title": "Steel Logistics Hub External",
+    "category": "Warehouse",
+    "image": "/images/gallery/gal6.jpg",
+    "size": "small"
+  },
+  {
+    "id": "gal7",
+    "title": "Heavy Crane Girder Fabrication",
+    "category": "Fabrication",
+    "image": "/images/gallery/gal7.jpg",
+    "size": "medium"
+  },
+  {
+    "id": "gal8",
+    "title": "Cold Storage Polyurethane Insulation",
+    "category": "Warehouse",
+    "image": "/images/gallery/gal8.jpg",
+    "size": "large"
+  },
+  {
+    "id": "gal9",
+    "title": "Self-Supporting Chimney Erected",
+    "category": "Erection",
+    "image": "/images/gallery/gal9.jpg",
+    "size": "medium"
+  }
+]

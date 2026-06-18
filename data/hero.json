@@ -1,0 +1,28 @@
+{
+  "title": "Engineering Tomorrow's Steel Structures",
+  "subtitle": "Delivering world-class Pre-Engineered Buildings, Warehouses, Industrial Sheds, Steel Fabrication and Structural Engineering Solutions with over 25+ years of excellence.",
+  "ctaText1": "Explore Projects",
+  "ctaLink1": "/projects",
+  "ctaText2": "Contact Us",
+  "ctaLink2": "/contact",
+  "videoUrl": "",
+  "imageUrl": "/images/peb-hero.png",
+  "stats": [
+    {
+      "value": "25+",
+      "label": "Years Experience"
+    },
+    {
+      "value": "250+",
+      "label": "Ton Monthly Fabrication Capacity"
+    },
+    {
+      "value": "60+",
+      "label": "Projects Completed Every Year"
+    },
+    {
+      "value": "100%",
+      "label": "Customer Satisfaction"
+    }
+  ]
+}

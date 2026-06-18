@@ -1,0 +1,57 @@
+{
+  "name": "Shree Nivi Buildtech",
+  "logoText": "SHREE NIVI BUILDTECH",
+  "aboutTitle": "Engineered for Strength. Designed for Scale.",
+  "aboutStory": "Established in 2001, Shree Nivi Buildtech has grown to become a premier leader in the infrastructure sector. We specialize in Pre-Engineered Buildings (PEB), complex steel structural works, and heavy industrial fabrication. Over the past 25 years, our commitment to cutting-edge engineering, uncompromising safety standards, and client-first delivery has powered over 1,500 projects across the region. From aerospace hangars to automobile assembly lines, we bridge the gap between design vision and physical endurance.",
+  "mdName": "K. N. Viswanathan",
+  "mdTitle": "Founder & Managing Director",
+  "mdMessage": "At Shree Nivi Buildtech, we believe steel is more than just a structural element; it is the skeleton of our country's economic future. When we construct a factory or raise a warehouse, we are laying down the foundations for industrial acceleration. Our focus remains on combining state-of-the-art automated machinery with the finest engineering minds to deliver projects faster, safer, and with superior cost-efficiencies.",
+  "mdImage": "/images/md.jpg",
+  "mission": "To design, manufacture, and erect the safest, most durable steel structures using sustainable engineering and automation, establishing ourselves as the gold standard of industrial infrastructure.",
+  "vision": "To lead the global transition toward smart, rapid-build steel infrastructure, delivering eco-friendly, zero-defect structures that support the industries of tomorrow.",
+  "coreValues": [
+    {
+      "title": "Safety First",
+      "description": "We enforce rigorous safety rules across all workshops and construction sites."
+    },
+    {
+      "title": "Engineering Precision",
+      "description": "Every beam and bolt is checked to meet exact structural load calculations."
+    },
+    {
+      "title": "Integrity & Trust",
+      "description": "We maintain transparent project timelines and pricing budgets."
+    },
+    {
+      "title": "Innovation Driven",
+      "description": "We constantly invest in CNC machining and robotic fabrication."
+    }
+  ],
+  "journeyTimeline": [
+    {
+      "year": "2001",
+      "title": "Company Founded",
+      "description": "Began operations as a steel structural fabrication workshop with a team of 10."
+    },
+    {
+      "year": "2007",
+      "title": "PEB Expansion",
+      "description": "Pioneered Pre-Engineered Building manufacturing, doubling fabrication capacity."
+    },
+    {
+      "year": "2013",
+      "title": "Automated Fab Facility",
+      "description": "Inaugurated a fully automated fabrication facility with advanced CNC machinery."
+    },
+    {
+      "year": "2018",
+      "title": "Global Quality Certifications",
+      "description": "Achieved ISO 9001:2015, ISO 14001, and OHSAS 18001 certifications."
+    },
+    {
+      "year": "2026",
+      "title": "Silver Jubilee & Automation Era",
+      "description": "Celebrating 25 years of excellence, hitting 250+ tons of daily fabrication capacity."
+    }
+  ]
+}

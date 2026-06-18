@@ -1,0 +1,74 @@
+[
+  {
+    "id": "senior-peb-designer",
+    "title": "Senior PEB Structural Designer",
+    "category": "Design",
+    "department": "Engineering Design",
+    "location": "Chennai Office",
+    "type": "Full-time",
+    "experience": "5-8 Years",
+    "description": "We are seeking an experienced structural designer specializing in Tekla Structures and MBS software to design complex Pre-Engineered Buildings, calculate loads, and prepare erection schemes.",
+    "requirements": [
+      "B.E. / M.Tech in Structural Engineering",
+      "Expertise in Tekla Structures, MBS, STAAD.Pro",
+      "In-depth knowledge of IS and AISC codes for steel designs",
+      "Experience executing clear spans greater than 50 meters"
+    ],
+    "image": "/images/peb_designer.png",
+    "badge": "Urgent Hiring"
+  },
+  {
+    "id": "bim-software-developer",
+    "title": "BIM Software Developer",
+    "category": "IT",
+    "department": "IT & Software Systems",
+    "location": "Chennai / Remote",
+    "type": "Remote",
+    "experience": "3-5 Years",
+    "description": "Develop and maintain custom Tekla APIs, Revit plugins, and internal structural optimization software. Standardize automation workflows for structural detailing.",
+    "requirements": [
+      "B.Tech in Computer Science / Civil Engineering",
+      "Proficient in C#, .NET, and Autodesk/Tekla API integration",
+      "Familiarity with computational design tools (Grasshopper, Dynamo)",
+      "Strong debugging and software design patterns"
+    ],
+    "image": "/images/bim_developer.png",
+    "badge": "Remote"
+  },
+  {
+    "id": "marketing-manager",
+    "title": "Industrial Marketing Specialist",
+    "category": "Marketing",
+    "department": "Sales & Business Development",
+    "location": "Chennai Office",
+    "type": "Full-time",
+    "experience": "4-6 Years",
+    "description": "Drive lead generation campaigns, coordinate B2B corporate events, and manage branding materials for high-value industrial warehouse and factory tenders.",
+    "requirements": [
+      "MBA in Marketing or relevant business degree",
+      "Experience in B2B construction/industrial equipment marketing",
+      "Skilled in SEO, LinkedIn Ads, and CRM tools",
+      "Excellent communication and pitch preparation skills"
+    ],
+    "image": "/images/marketing_lead.png",
+    "badge": "New"
+  },
+  {
+    "id": "hr-partner",
+    "title": "Talent Acquisition Partner",
+    "category": "HR",
+    "department": "Human Resources",
+    "location": "Chennai Office",
+    "type": "Full-time",
+    "experience": "3-5 Years",
+    "description": "Lead the recruitment cycle for engineering, project site execution, and structural design teams, cultivating a high-performance talent pipeline.",
+    "requirements": [
+      "Master's in Human Resources (MBA / MSW)",
+      "Proven recruiting experience in heavy engineering or construction sector",
+      "Strong candidate evaluation and onboarding capabilities",
+      "Exceptional interpersonal and sourcing skills"
+    ],
+    "image": "/images/hr_specialist.png",
+    "badge": "New"
+  }
+]

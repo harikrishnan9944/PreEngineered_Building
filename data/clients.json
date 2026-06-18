@@ -1,0 +1,50 @@
+[
+  {
+    "id": "c1",
+    "name": "Tata Motors",
+    "industry": "Automobile",
+    "logo": "tata.svg"
+  },
+  {
+    "id": "c2",
+    "name": "Reliance Industries",
+    "industry": "Logistics & Retail",
+    "logo": "reliance.svg"
+  },
+  {
+    "id": "c3",
+    "name": "JSW Steel",
+    "industry": "Manufacturing",
+    "logo": "jsw.svg"
+  },
+  {
+    "id": "c4",
+    "name": "Larsen & Toubro",
+    "industry": "Infrastructure",
+    "logo": "lt.svg"
+  },
+  {
+    "id": "c5",
+    "name": "Arvind Mills",
+    "industry": "Textiles",
+    "logo": "arvind.svg"
+  },
+  {
+    "id": "c6",
+    "name": "Blue Star",
+    "industry": "Cold Storage",
+    "logo": "bluestar.svg"
+  },
+  {
+    "id": "c7",
+    "name": "SKF India",
+    "industry": "Automotive Parts",
+    "logo": "skf.svg"
+  },
+  {
+    "id": "c8",
+    "name": "Volvo Construction",
+    "industry": "Equipment",
+    "logo": "volvo.svg"
+  }
+]

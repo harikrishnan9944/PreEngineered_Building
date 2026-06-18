@@ -1,0 +1,38 @@
+[
+  {
+    "id": "t1",
+    "name": "Rajesh Subramanian",
+    "role": "VP - Infrastructure & Projects",
+    "company": "Hindustan Logistics Corp.",
+    "rating": 5,
+    "quote": "Shree Nivi Buildtech delivered our Jhajjar warehouse ahead of schedule. The structural quality of the PEB columns and the laser-guided flooring finish exceeded our standards. Their engineering team is extremely detail-oriented.",
+    "image": "/images/testimonials/user1.jpg"
+  },
+  {
+    "id": "t2",
+    "name": "Ananya Sen",
+    "role": "Director of Plant Operations",
+    "company": "Arvind Composite Mills",
+    "rating": 5,
+    "quote": "Building a textile spinning mill requires complex integrated ventilation and dust extraction channels inside the trusses. Shree Nivi Buildtech custom fabricated the structural grids to allow perfect HVAC integration. Exceptional workmanship.",
+    "image": "/images/testimonials/user2.jpg"
+  },
+  {
+    "id": "t3",
+    "name": "Er. Manoj Deshmukh",
+    "role": "Chief Projects Coordinator",
+    "company": "Tata Motors EV Division",
+    "rating": 5,
+    "quote": "For our EV assembly line, we needed massive crane capacities and strict vibration control. Shree Nivi Buildtech engineered a flawless heavy steel truss layout that accommodates our monorails. Their safety record on site was zero-incident.",
+    "image": "/images/testimonials/user3.jpg"
+  },
+  {
+    "id": "t4",
+    "name": "Vikram Rathore",
+    "role": "General Manager - Supply Chain",
+    "company": "Blue Star Cold Chain Hub",
+    "rating": 5,
+    "quote": "Temperature retention is critical for our pharmaceuticals. The PUF panels and thermal break structural steel designs provided by Shree Nivi Buildtech have helped us achieve consistent thermal efficiency, saving us 15% in utility bills.",
+    "image": "/images/testimonials/user4.jpg"
+  }
+]

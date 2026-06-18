@@ -1,0 +1,56 @@
+[
+  {
+    "id": "residential",
+    "title": "Residential Construction",
+    "description": "Custom luxury villas, multi-family housing, and premium residential spaces built with quality materials and master craftsmanship.",
+    "icon": "Home",
+    "image": "/images/residential.png",
+    "features": ["Turnkey Project Management", "High-End Structural Finishing", "Energy-Efficient Designs", "25-Year Warranty"],
+    "details": "We provide end-to-end residential construction services, from excavation to final keys. Our team coordinates architectural designers, structural engineers, and skilled artisans to construct your dream home with meticulous attention to detail, using premium concrete, steel, and high-end materials."
+  },
+  {
+    "id": "commercial",
+    "title": "Commercial Buildings",
+    "description": "State-of-the-art office buildings, shopping malls, retail centers, and modern corporate plazas designed for scale and prestige.",
+    "icon": "Building",
+    "image": "/images/commercial.png",
+    "features": ["High-Rise Structures", "Modern Glass & Steel Facades", "Smart Building Integration", "Leed Green Certifications"],
+    "details": "Our commercial construction division delivers modern office blocks and corporate hubs. We incorporate structural safety, sustainable energy systems, HVAC engineering, and elegant glass curtain walls, delivering workspace environments that match global standards."
+  },
+  {
+    "id": "industrial",
+    "title": "Industrial Projects",
+    "description": "Heavy manufacturing plants, pre-engineered steel buildings (PEB), massive warehouses, and cold storage logistics complexes.",
+    "icon": "Factory",
+    "image": "/images/industrial.png",
+    "features": ["Turnkey Industrial Sheds", "Tekla 3D Steel Designs", "Heavy Crane Support Lines", "Heavy-Duty Floor Casting"],
+    "details": "As leading industrial builders, we engineer structural steel skeletons, massive Pre-Engineered Buildings (PEB), and logistics warehouses. We handle heavy dynamic equipment loads, vibration-dampening flooring, gantry cranes, and modular layouts for factories."
+  },
+  {
+    "id": "interior",
+    "title": "Interior Works",
+    "description": "Bespoke corporate offices, modern commercial spaces, and premium residential interior fit-outs combining ergonomics and luxury.",
+    "icon": "Paintbrush",
+    "image": "/images/interior.png",
+    "features": ["Acoustic Ceiling Systems", "Custom Millwork & Carpentry", "Ergonomic Layout Planning", "Integrated Lighting Scenarios"],
+    "details": "Our interior works division creates inspiring spaces. We handle false ceilings, partitions, custom furniture, electrical distribution, flooring, and decorative paints to transform raw building shells into functional, highly-aesthetic environments."
+  },
+  {
+    "id": "renovation",
+    "title": "Renovation Services",
+    "description": "Structural retrofitting, architectural expansions, facade remodelling, and comprehensive rehabilitation of old buildings.",
+    "icon": "Hammer",
+    "image": "/images/renovation.png",
+    "features": ["Seismic Retrofitting", "Facade Glass Modernisation", "Slab & Column Strengthening", "Interior Demolition & Rebuild"],
+    "details": "Upgrade, repair, or extend existing structures safely. We use high-tensile carbon fiber wrapping, micro-concrete jacketing, and structural reinforcements to extend the lifetime of aging concrete or steel complexes while modernising their visual appeal."
+  },
+  {
+    "id": "architecture",
+    "title": "Architecture Design",
+    "description": "Innovative architectural schematics, 3D photorealistic renderings, zoning layouts, and comprehensive engineering design drawings.",
+    "icon": "Layout",
+    "image": "/images/architecture.png",
+    "features": ["3D BIM modeling", "Bespoke Architectural Schemes", "Structural Calculation Reports", "Local Building Approvals"],
+    "details": "Every masterpiece starts on paper. Our specialized design office develops architectural layouts, structural calculations, plumbing, and electrical drawings using advanced Building Information Modeling (BIM) software for seamless execution on-site."
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "future-of-peb-design",
+    "slug": "future-of-peb-design",
+    "title": "The Future of Pre-Engineered Buildings (PEB) in 2026",
+    "summary": "Discover how automated design systems and modular steel structures are transforming factory and warehouse construction timelines.",
+    "category": "Industrial Articles",
+    "image": "/images/blog/blog1.jpg",
+    "date": "June 15, 2026",
+    "author": "Ar. Ramesh Kumar",
+    "readTime": "6 min read",
+    "tags": ["PEB", "Innovation", "Steel Construction"]
+  },
+  {
+    "id": "steel-maintenance-tips",
+    "slug": "steel-maintenance-tips",
+    "title": "5 Essential Maintenance Tips for Industrial Steel Structures",
+    "summary": "Prevent corrosion and ensure structural integrity. Learn about epoxy coatings, joint sealants, and ultrasonic structural checking.",
+    "category": "Steel Tips",
+    "image": "/images/blog/blog2.jpg",
+    "date": "June 10, 2026",
+    "author": "Er. Suresh Nair",
+    "readTime": "8 min read",
+    "tags": ["Maintenance", "Corrosion Control", "Safety"]
+  },
+  {
+    "id": "green-steel-revolution",
+    "slug": "green-steel-revolution",
+    "title": "The Green Revolution: Sustainable Steel & Net-Zero Construction",
+    "summary": "How Shree Nivi Buildtech is adopting scrap-melted electric arc furnace steel and solar roofs to meet green carbon goals.",
+    "category": "Construction News",
+    "image": "/images/blog/blog3.jpg",
+    "date": "May 28, 2026",
+    "author": "Viswanathan K. N.",
+    "readTime": "5 min read",
+    "tags": ["Green Energy", "Sustainability", "Eco-Steel"]
+  }
+]
