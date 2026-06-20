@@ -24,6 +24,7 @@ import {
   Search,
   Filter,
   Upload,
+  UploadCloud,
   Copy,
   Check,
   CheckSquare,
@@ -51,6 +52,157 @@ import {
   AlertTriangle,
   FileSpreadsheet
 } from 'lucide-react';
+
+interface ImageUploadZoneProps {
+  value: string;
+  onChange: (url: string) => void;
+  onOpenMedia: () => void;
+  label?: string;
+  previewHeight?: string;
+}
+
+function ImageUploadZone({
+  value,
+  onChange,
+  onOpenMedia,
+  label = "Upload Image",
+  previewHeight = "h-36"
+}: ImageUploadZoneProps) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+
+      const res = await fetch('/api/admin/media', {
+        method: 'POST',
+        body: data
+      });
+
+      const resData = await res.json();
+      if (!res.ok) throw new Error(resData.error || 'Upload failed');
+
+      if (resData.media && resData.media.length > 0) {
+        onChange(resData.media[0].url);
+      }
+    } catch (err) {
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        await uploadFile(file);
+      } else {
+        alert('Please drop an image file.');
+      }
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      await uploadFile(file);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`relative rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center p-4 bg-[#0f172a]/40 ${
+          isDragging ? 'border-[#f97316] bg-[#f97316]/5 scale-[1.01]' : 'border-[#334155] hover:border-slate-500'
+        } ${previewHeight}`}
+      >
+        {isUploading ? (
+          <div className="flex flex-col items-center gap-2 text-slate-400">
+            <Loader2 className="w-8 h-8 animate-spin text-[#f97316]" />
+            <span className="text-[10px] font-bold uppercase tracking-wider">Uploading...</span>
+          </div>
+        ) : value ? (
+          <div className="relative w-full h-full group rounded-lg overflow-hidden flex items-center justify-center bg-slate-950/20">
+            <img
+              src={value}
+              alt="Preview"
+              className="max-h-full max-w-full object-contain rounded"
+            />
+            <div className="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <label className="px-3 py-1.5 bg-[#f97316] hover:bg-[#ea580c] rounded-lg text-[10px] font-bold uppercase text-white cursor-pointer transition-all">
+                Replace
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => onChange('')}
+                className="px-3 py-1.5 bg-red-650 hover:bg-red-700 rounded-lg text-[10px] font-bold uppercase text-white transition-all"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center gap-1 cursor-pointer w-full h-full py-4">
+            <UploadCloud className="w-8 h-8 text-slate-400 mb-1" />
+            <span className="text-[10px] text-white font-bold uppercase tracking-wide text-center">
+              Drag & Drop Image Here
+            </span>
+            <span className="text-[9px] text-slate-500 text-center">
+              or click to browse your files
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+        )}
+      </div>
+      
+      <div className="flex justify-between items-center px-1">
+        <button
+          type="button"
+          onClick={onOpenMedia}
+          className="text-[9px] font-bold text-slate-400 hover:text-white uppercase tracking-wider flex items-center gap-1.5"
+        >
+          <Image className="w-3.5 h-3.5 text-slate-400" />
+          Select from Media Library
+        </button>
+        {value && (
+          <span className="text-[8px] font-mono text-slate-500 max-w-[200px] truncate" title={value}>
+            {value}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function UserFriendlyDashboard() {
   const router = useRouter();
@@ -541,23 +693,23 @@ export default function UserFriendlyDashboard() {
 
   // Sidebar navigation options (Simplified language, no technical jargon)
   const navItems = [
-    { id: 'dashboard', label: '📊 Control Panel Overview', icon: LayoutDashboard },
-    { id: 'hero', label: '🏠 Home Page Banner', icon: Sliders },
-    { id: 'about', label: '👤 About Company Story', icon: Info },
-    { id: 'services', label: '🛠 Services We Offer', icon: Wrench },
-    { id: 'projects', label: '🏗 Projects & Works', icon: FolderGit },
-    { id: 'gallery', label: '🖼 Photo Gallery', icon: ImageIcon },
-    { id: 'careers', label: '💼 Career Postings', icon: Briefcase },
-    { id: 'blogs', label: '📰 News & Blog Articles', icon: FileText },
-    { id: 'testimonials', label: '⭐ Client Reviews', icon: MessageSquareQuote },
-    { id: 'clients', label: '🤝 Clients & Partners', icon: Users },
-    { id: 'contact-settings', label: '📞 Contact Details', icon: Home },
-    { id: 'quotes', label: '📩 Customer Quote Requests', icon: MailQuestion, badge: singleData.quotesPending },
-    { id: 'applications', label: '📄 Job Applications', icon: FileBadge2, badge: singleData.appsPending },
-    { id: 'media', label: '🖼 Uploaded Images & Files', icon: Upload },
-    { id: 'seo', label: '🔍 Google Search (SEO)', icon: Globe },
-    { id: 'settings', label: '⚙ Website Settings', icon: Settings },
-    { id: 'profile', label: '👤 My Profile Settings', icon: User },
+    { id: 'dashboard', label: 'Control Panel Overview', icon: LayoutDashboard },
+    { id: 'hero', label: 'Home Page Banner', icon: Sliders },
+    { id: 'about', label: 'About Company Story', icon: Info },
+    { id: 'services', label: 'Services We Offer', icon: Wrench },
+    { id: 'projects', label: 'Projects & Works', icon: FolderGit },
+    { id: 'gallery', label: 'Photo Gallery', icon: ImageIcon },
+    { id: 'careers', label: 'Career Postings', icon: Briefcase },
+    { id: 'blogs', label: 'News & Blog Articles', icon: FileText },
+    { id: 'testimonials', label: 'Client Reviews', icon: MessageSquareQuote },
+    { id: 'clients', label: 'Clients & Partners', icon: Users },
+    { id: 'contact-settings', label: 'Contact Details', icon: Home },
+    { id: 'quotes', label: 'Customer Quote Requests', icon: MailQuestion, badge: singleData.quotesPending },
+    { id: 'applications', label: 'Job Applications', icon: FileBadge2, badge: singleData.appsPending },
+    { id: 'media', label: 'Uploaded Images & Files', icon: Upload },
+    { id: 'seo', label: 'Google Search (SEO)', icon: Globe },
+    { id: 'settings', label: 'Website Settings', icon: Settings },
+    { id: 'profile', label: 'My Profile Settings', icon: User },
   ];
 
   return (
@@ -600,7 +752,10 @@ export default function UserFriendlyDashboard() {
                       : 'text-[#cbd5e1] hover:bg-[#1e293b] hover:text-white'
                   }`}
                 >
-                  <span className="tracking-wide text-left">{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-orange-500/80'}`} />
+                    <span className="tracking-wide text-left">{item.label}</span>
+                  </div>
                   {item.badge ? (
                     <span className="px-2 py-0.5 rounded-full text-[9px] bg-red-650 text-white font-bold leading-none">
                       {item.badge}
@@ -641,7 +796,7 @@ export default function UserFriendlyDashboard() {
         <header className="h-16 border-b border-[#334155] bg-[#070c18]/30 px-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-extrabold text-white tracking-wide">
-              {navItems.find(item => item.id === activeTab)?.label.substring(2)}
+              {navItems.find(item => item.id === activeTab)?.label}
             </h2>
           </div>
           <div className="flex items-center gap-4">
@@ -665,7 +820,7 @@ export default function UserFriendlyDashboard() {
               {/* Large beginner explanation card */}
               <div className="p-6 bg-gradient-to-r from-[#1e293b]/70 to-[#0f172a] border border-[#334155] rounded-2xl">
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <span>Welcome to Shree Nivi Buildtech Admin Panel! 👋</span>
+                  <span>Welcome to Shree Nivi Buildtech Admin Panel!</span>
                 </h3>
                 <p className="text-slate-400 text-xs mt-2 leading-relaxed font-medium">
                   This page allows you to change the photos, details, texts, and blogs displayed on your website without editing any code.
@@ -676,14 +831,18 @@ export default function UserFriendlyDashboard() {
               {/* Stat Cards Grid (Large, with icons and simple labels) */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
-                  { label: '🏗 Total Projects & Works Done', val: singleData.projectsCount || 0, color: 'from-blue-650/15 to-blue-500/5 border-blue-500/20 text-blue-400' },
-                  { label: '🛠 Services Offered on Website', val: singleData.servicesCount || 0, color: 'from-orange-650/15 to-orange-500/5 border-orange-500/20 text-orange-400' },
-                  { label: '📩 Unread Customer Quote Requests', val: singleData.quotesPending || 0, color: 'from-yellow-650/15 to-yellow-500/5 border-yellow-500/20 text-yellow-400', sub: `${singleData.quotesCount || 0} total requests` },
-                  { label: '📄 Job Applications Submitted', val: singleData.appsPending || 0, color: 'from-green-650/15 to-green-500/5 border-green-500/20 text-green-400', sub: `${singleData.appsCount || 0} total applications` },
+                  { label: 'Total Projects & Works Done', val: singleData.projectsCount || 0, icon: FolderGit, color: 'from-blue-650/15 to-blue-500/5 border-blue-500/20 text-blue-400' },
+                  { label: 'Services Offered on Website', val: singleData.servicesCount || 0, icon: Wrench, color: 'from-orange-650/15 to-orange-500/5 border-orange-500/20 text-orange-400' },
+                  { label: 'Unread Customer Quote Requests', val: singleData.quotesPending || 0, icon: MailQuestion, color: 'from-yellow-650/15 to-yellow-500/5 border-yellow-500/20 text-yellow-400', sub: `${singleData.quotesCount || 0} total requests` },
+                  { label: 'Job Applications Submitted', val: singleData.appsPending || 0, icon: FileBadge2, color: 'from-green-650/15 to-green-500/5 border-green-500/20 text-green-400', sub: `${singleData.appsCount || 0} total applications` },
                 ].map((stat, idx) => {
+                  const IconComp = stat.icon;
                   return (
-                    <div key={idx} className={`bg-gradient-to-br ${stat.color} border rounded-2xl p-6 shadow-lg flex flex-col justify-between min-h-[140px]`}>
-                      <span className="text-xs font-bold uppercase tracking-wider opacity-80">{stat.label}</span>
+                    <div key={idx} className={`bg-gradient-to-br ${stat.color} border rounded-2xl p-6 shadow-lg flex flex-col justify-between min-h-[140px] relative overflow-hidden group`}>
+                      <div className="flex justify-between items-start gap-4">
+                        <span className="text-xs font-bold uppercase tracking-wider opacity-80">{stat.label}</span>
+                        <IconComp className="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                      </div>
                       <div className="mt-4">
                         <h3 className="text-4xl font-black">{stat.val}</h3>
                         {stat.sub && <span className="text-[10px] opacity-60 font-bold block mt-1">{stat.sub}</span>}
@@ -861,23 +1020,12 @@ export default function UserFriendlyDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-xs text-slate-200 font-bold uppercase">Banner Background Image</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={singleData.imageUrl || ''}
-                      placeholder="/images/peb-hero.png"
-                      onChange={(e) => setSingleData({ ...singleData, imageUrl: e.target.value })}
-                      className="flex-1 px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => openMediaSelector('imageUrl', 'single')}
-                      className="px-4 bg-[#1e293b] border border-[#334155] hover:bg-[#334155] rounded-xl text-xs font-bold cursor-pointer"
-                    >
-                      Select Photo
-                    </button>
-                  </div>
-                  <span className="text-[10px] text-slate-500">Pick an image from your library or type its link url. Recommended dimensions: 1920x1080.</span>
+                  <ImageUploadZone
+                    value={singleData.imageUrl || ''}
+                    onChange={(url) => setSingleData({ ...singleData, imageUrl: url })}
+                    onOpenMedia={() => openMediaSelector('imageUrl', 'single')}
+                  />
+                  <span className="text-[10px] text-slate-500">Upload an image or pick from library. Recommended dimensions: 1920x1080.</span>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -1070,22 +1218,11 @@ export default function UserFriendlyDashboard() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-xs text-slate-200 font-bold">MD Profile Photo</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={singleData.mdImage || ''}
-                        placeholder="/images/md.jpg"
-                        onChange={(e) => setSingleData({ ...singleData, mdImage: e.target.value })}
-                        className="flex-1 px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => openMediaSelector('mdImage', 'single')}
-                        className="px-3 bg-[#1e293b] border border-[#334155] hover:bg-[#334155] rounded-xl text-xs font-bold cursor-pointer"
-                      >
-                        Select Photo
-                      </button>
-                    </div>
+                    <ImageUploadZone
+                      value={singleData.mdImage || ''}
+                      onChange={(url) => setSingleData({ ...singleData, mdImage: url })}
+                      onOpenMedia={() => openMediaSelector('mdImage', 'single')}
+                    />
                   </div>
                 </div>
 
@@ -1790,22 +1927,11 @@ export default function UserFriendlyDashboard() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-xs text-slate-200 font-bold uppercase">WhatsApp & Social Share Preview Photo</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={singleData.ogImage || ''}
-                      placeholder="/images/peb-hero.png"
-                      onChange={(e) => setSingleData({ ...singleData, ogImage: e.target.value })}
-                      className="flex-1 px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => openMediaSelector('ogImage', 'single')}
-                      className="px-3 bg-[#1e293b] border border-[#334155] hover:bg-[#334155] rounded-xl text-xs font-bold cursor-pointer"
-                    >
-                      Select Photo
-                    </button>
-                  </div>
+                  <ImageUploadZone
+                    value={singleData.ogImage || ''}
+                    onChange={(url) => setSingleData({ ...singleData, ogImage: url })}
+                    onOpenMedia={() => openMediaSelector('ogImage', 'single')}
+                  />
                 </div>
               </div>
 
@@ -1899,22 +2025,11 @@ export default function UserFriendlyDashboard() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-xs text-slate-200 font-bold uppercase">Browser Tab Favicon Photo Link</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={singleData.faviconUrl || ''}
-                      placeholder="/favicon.ico"
-                      onChange={(e) => setSingleData({ ...singleData, faviconUrl: e.target.value })}
-                      className="flex-1 px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => openMediaSelector('faviconUrl', 'single')}
-                      className="px-3 bg-[#1e293b] border border-[#334155] hover:bg-[#334155] rounded-xl text-xs font-bold cursor-pointer"
-                    >
-                      Select Photo
-                    </button>
-                  </div>
+                  <ImageUploadZone
+                    value={singleData.faviconUrl || ''}
+                    onChange={(url) => setSingleData({ ...singleData, faviconUrl: url })}
+                    onOpenMedia={() => openMediaSelector('faviconUrl', 'single')}
+                  />
                 </div>
               </div>
 
@@ -2008,22 +2123,11 @@ export default function UserFriendlyDashboard() {
 
               <div className="flex flex-col gap-2 max-w-md">
                 <label className="text-xs text-slate-200 font-bold uppercase">Profile Avatar Photo</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={singleData.profilePhoto || ''}
-                    placeholder="/images/default-avatar.png"
-                    onChange={(e) => setSingleData({ ...singleData, profilePhoto: e.target.value })}
-                    className="flex-1 px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => openMediaSelector('profilePhoto', 'single')}
-                    className="px-3 bg-[#1e293b] border border-[#334155] hover:bg-[#334155] rounded-xl text-xs font-bold cursor-pointer"
-                  >
-                    Select Photo
-                  </button>
-                </div>
+                <ImageUploadZone
+                  value={singleData.profilePhoto || ''}
+                  onChange={(url) => setSingleData({ ...singleData, profilePhoto: url })}
+                  onOpenMedia={() => openMediaSelector('profilePhoto', 'single')}
+                />
               </div>
 
               {/* Password subform */}
@@ -2149,23 +2253,11 @@ export default function UserFriendlyDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Service card image photo</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.image || ''}
-                          placeholder="/images/services/warehouse.jpg"
-                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('image')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.image || ''}
+                        onChange={(url) => setFormData({ ...formData, image: url })}
+                        onOpenMedia={() => openMediaSelector('image')}
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Lucide Icon Name</label>
@@ -2332,23 +2424,11 @@ export default function UserFriendlyDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1.5 sm:col-span-2">
                       <label className="text-slate-200 uppercase tracking-widest">Project Thumbnail Photo</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.image || ''}
-                          placeholder="/images/projects/project1.jpg"
-                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('image')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.image || ''}
+                        onChange={(url) => setFormData({ ...formData, image: url })}
+                        onOpenMedia={() => openMediaSelector('image')}
+                      />
                     </div>
                     <div className="flex flex-row gap-6 items-center justify-around border border-[#334155] bg-[#0f172a]/40 rounded-lg p-2.5">
                       <label className="flex items-center gap-2 text-white cursor-pointer select-none">
@@ -2395,31 +2475,26 @@ export default function UserFriendlyDashboard() {
                         + Add Image URL
                       </button>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {(formData.gallery || []).map((imgUrl: string, idx: number) => (
-                        <div key={idx} className="flex gap-2 items-center">
-                          <input
-                            type="text"
-                            required
+                        <div key={idx} className="relative p-3 border border-[#334155] rounded-xl bg-[#0f172a]/20 flex flex-col gap-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Photo #{idx + 1}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeArrayField(idx, 'gallery')}
+                              className="p-1 text-red-400 hover:text-red-500 rounded transition-colors"
+                              title="Delete Photo"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                          <ImageUploadZone
                             value={imgUrl}
-                            placeholder="/images/projects/gallery1.jpg"
-                            onChange={(e) => handleArrayFieldChange(idx, e.target.value, 'gallery')}
-                            className="flex-1 px-3 py-2 text-[10px] rounded border border-[#334155] bg-[#0f172a]/80 text-white outline-none focus:border-[#f97316] font-mono"
+                            onChange={(url) => handleArrayFieldChange(idx, url, 'gallery')}
+                            onOpenMedia={() => openMediaSelector(`gallery[${idx}]`)}
+                            previewHeight="h-28"
                           />
-                          <button
-                            type="button"
-                            onClick={() => openMediaSelector(`gallery[${idx}]`)}
-                            className="px-3 py-2 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded text-[10px]"
-                          >
-                            Select Photo
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeArrayField(idx, 'gallery')}
-                            className="p-2 bg-red-650/10 text-red-400 border border-red-500/20 rounded"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
                         </div>
                       ))}
                     </div>
@@ -2458,23 +2533,11 @@ export default function UserFriendlyDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Photo URL Link</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.image || ''}
-                          placeholder="/images/gallery/welding.jpg"
-                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('image')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.image || ''}
+                        onChange={(url) => setFormData({ ...formData, image: url })}
+                        onOpenMedia={() => openMediaSelector('image')}
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Gallery Category Filter</label>
@@ -2722,23 +2785,11 @@ export default function UserFriendlyDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Feature Thumbnail Image</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.image || ''}
-                          placeholder="/images/blog/blog-thumbnail.jpg"
-                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('image')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.image || ''}
+                        onChange={(url) => setFormData({ ...formData, image: url })}
+                        onOpenMedia={() => openMediaSelector('image')}
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Author Writer Name</label>
@@ -2996,22 +3047,11 @@ export default function UserFriendlyDashboard() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Client Photo</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={formData.image || ''}
-                          placeholder="/images/testimonials/client1.jpg"
-                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('image')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.image || ''}
+                        onChange={(url) => setFormData({ ...formData, image: url })}
+                        onOpenMedia={() => openMediaSelector('image')}
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Rating Stars (1 to 5)</label>
@@ -3071,23 +3111,11 @@ export default function UserFriendlyDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Partner Logo Photo</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.logo || ''}
-                          placeholder="/images/clients/logo1.png"
-                          onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono text-[10px]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => openMediaSelector('logo')}
-                          className="px-3 bg-[#0f172a] border border-[#334155] hover:bg-[#334155] rounded-lg text-[10px]"
-                        >
-                          Select Photo
-                        </button>
-                      </div>
+                      <ImageUploadZone
+                        value={formData.logo || ''}
+                        onChange={(url) => setFormData({ ...formData, logo: url })}
+                        onOpenMedia={() => openMediaSelector('logo')}
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-slate-200 uppercase tracking-widest">Partner Website URL Link</label>
