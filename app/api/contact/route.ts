@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { connectToDatabase } from '@/lib/mongodb';
+import { QuoteRequest } from '@/models/schemas';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +22,24 @@ export async function POST(request: NextRequest) {
         { error: 'Please enter a valid email address.' },
         { status: 400 }
       );
+    }
+
+    // Save inquiry to MongoDB
+    try {
+      await connectToDatabase();
+      await QuoteRequest.create({
+        name,
+        email,
+        phone,
+        subject,
+        serviceInterest: serviceInterest || 'General Inquiry',
+        message,
+        timestamp: new Date(),
+        status: 'unread'
+      });
+    } catch (dbErr) {
+      console.error('Failed to save contact inquiry to MongoDB:', dbErr);
+      // We continue to send the email even if DB save fails, to avoid losing leads
     }
 
     // 2. Minimal SMTP Environment Variables check (Strictly only SMTP_USER and SMTP_PASS)

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { connectToDatabase } from '@/lib/mongodb';
+import { JobApplication } from '@/models/schemas';
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,12 +41,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Process optional resume file
+    // 3. Process resume file & Save locally to public/uploads for CMS download
     let attachment = null;
+    let resumeUrl = '';
     if (resumeFile && resumeFile.size > 0) {
       try {
         const arrayBuffer = await resumeFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
+        
+        // Save file locally
+        const ext = resumeFile.name.split('.').pop() || 'pdf';
+        const filename = `resume-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+        await fs.mkdir(uploadDir, { recursive: true });
+        const filePath = path.join(uploadDir, filename);
+        await fs.writeFile(filePath, buffer);
+        resumeUrl = `/uploads/${filename}`;
+
         attachment = {
           filename: resumeFile.name,
           content: buffer,
@@ -55,6 +70,25 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+    }
+
+    // Save application to MongoDB
+    try {
+      await connectToDatabase();
+      await JobApplication.create({
+        jobId: position ? position.toLowerCase().replace(/\s+/g, '-') : 'general',
+        jobTitle: position || 'General Application',
+        name,
+        email,
+        phone,
+        coverLetter,
+        resumeUrl,
+        status: 'unread',
+        timestamp: new Date()
+      });
+    } catch (dbErr) {
+      console.error('Failed to save job application to MongoDB:', dbErr);
+      // We continue to send the email even if DB save fails
     }
 
     // 4. Setup Nodemailer Transporter using Gmail SMTP (smtp.gmail.com, port 465)

@@ -8,7 +8,7 @@ import Magnet from '@/components/animations/Magnet';
 import GlowCard from '@/components/ui/GlowCard';
 import Hero from '@/components/Hero';
 import ContactForm from '@/components/ContactForm';
-import { ArrowUpRight, CheckCircle, MapPin, Phone, Mail, Clock, Award, Shield, Building } from 'lucide-react';
+import { ArrowUpRight, CheckCircle, MapPin, Phone, Mail, Clock, Award, Shield, Building, Star, Quote } from 'lucide-react';
 
 export default async function Page() {
   const heroData = await readJson<HeroData>('hero.json', {
@@ -35,6 +35,7 @@ export default async function Page() {
   } as any);
 
   const services = await readJson<ServiceData[]>('services.json', []);
+  const testimonials = await readJson<any[]>('testimonials.json', []);
 
   // Use all 6 services
   const homeServices = services.slice(0, 6);
@@ -186,6 +187,71 @@ export default async function Page() {
           </div>
         </div>
       </section>
+
+      {/* 4. CLIENT REVIEWS SECTION: Premium testimonial showcase */}
+      {testimonials && testimonials.length > 0 && (
+        <section className="py-24 bg-slate-50 dark:bg-slate-950/20 border-b border-slate-100 dark:border-white/5 relative">
+          <div className="animated-grid opacity-15" />
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <span className="text-sm font-bold text-industrial-orange uppercase tracking-widest block mb-3">
+                Client Reviews
+              </span>
+              <h2 className="text-3xl md:text-5xl font-black uppercase text-slate-900 dark:text-white tracking-tight">
+                What Our Clients Say
+              </h2>
+              <div className="h-1 w-20 bg-industrial-orange mx-auto mt-4 rounded-full" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {testimonials.map((testimonial, i) => (
+                <ScrollReveal key={testimonial.id || i} variant="slide-up" delay={i * 0.05}>
+                  <div className="p-8 rounded-3xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 shadow-lg relative flex flex-col justify-between h-full">
+                    <div className="absolute top-6 right-8 text-industrial-orange/10 dark:text-[#f97316]/5 pointer-events-none">
+                      <Quote className="w-12 h-12 fill-current" />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      {/* Stars rating */}
+                      <div className="flex gap-1 mb-5 text-yellow-500">
+                        {Array.from({ length: testimonial.rating || 5 }).map((_, idx) => (
+                          <Star key={idx} className="w-4 h-4 fill-current" />
+                        ))}
+                      </div>
+
+                      <p className="text-sm text-slate-600 dark:text-slate-350 leading-relaxed font-semibold italic mb-6">
+                        "{testimonial.quote}"
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4 mt-auto pt-5 border-t border-slate-100 dark:border-white/5">
+                      {testimonial.image ? (
+                        <img
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          className="w-10 h-10 rounded-full object-cover border border-industrial-orange/20 bg-slate-900"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-industrial-orange/15 text-industrial-orange flex items-center justify-center font-black text-xs border border-industrial-orange/20">
+                          {testimonial.name.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wide">
+                          {testimonial.name}
+                        </h4>
+                        <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
+                          {testimonial.role} <span className="text-industrial-orange font-bold">— {testimonial.company}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 5. CONTACT SECTION: Simple Form + Map + Call Button */}
       <section className="py-24 bg-white dark:bg-[#070c18] relative">
