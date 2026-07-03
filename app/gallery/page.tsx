@@ -9,6 +9,8 @@ export const metadata = {
   description: 'View real-world snapshots of our pre-engineered building structures, automated steel fabrication workshops, and construction site erections.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const galleryItems = await readJson<GalleryItem[]>('gallery.json', []);
 

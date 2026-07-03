@@ -94,12 +94,6 @@ export default function Footer() {
                 <Link href="/gallery" className="hover:text-industrial-orange transition-colors">Photo Gallery</Link>
               </li>
               <li>
-                <Link href="/careers" className="hover:text-industrial-orange transition-colors">Careers & Jobs</Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-industrial-orange transition-colors">Articles & News</Link>
-              </li>
-              <li>
                 <Link href="/admin" className="hover:text-industrial-orange transition-colors">Admin Portal</Link>
               </li>
             </ul>

@@ -9,6 +9,8 @@ export const metadata = {
   description: 'Explore our 14 premium industrial services including Pre-Engineered Buildings, Structural Steel, Warehouse Construction, and Heavy Fabrication.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const services = await readJson<ServiceData[]>('services.json', []);
 

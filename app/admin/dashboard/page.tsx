@@ -43,6 +43,7 @@ import {
   HelpCircle,
   ChevronRight,
   Bold,
+  Menu,
   Italic,
   Underline,
   List,
@@ -244,6 +245,7 @@ export default function UserFriendlyDashboard() {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [draftSavedTime, setDraftSavedTime] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // File Upload Reference
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -305,30 +307,22 @@ export default function UserFriendlyDashboard() {
     try {
       if (tab === 'dashboard') {
         // Load dashboard stats
-        const [servicesRes, projectsRes, quotesRes, appsRes, blogsRes] = await Promise.all([
+        const [servicesRes, projectsRes, quotesRes] = await Promise.all([
           fetch('/api/admin/services'),
           fetch('/api/admin/projects'),
           fetch('/api/admin/quotes'),
-          fetch('/api/admin/applications'),
-          fetch('/api/admin/blogs'),
         ]);
 
         const services = servicesRes.ok ? await servicesRes.json() : [];
         const projects = projectsRes.ok ? await projectsRes.json() : [];
         const quotes = quotesRes.ok ? await quotesRes.json() : [];
-        const apps = appsRes.ok ? await appsRes.json() : [];
-        const blogs = blogsRes.ok ? await blogsRes.json() : [];
 
         setSingleData({
           servicesCount: services.length,
           projectsCount: projects.length,
           quotesCount: quotes.length,
           quotesPending: quotes.filter((q: any) => q.status === 'unread').length,
-          appsCount: apps.length,
-          appsPending: apps.filter((a: any) => a.status === 'unread').length,
-          blogsCount: blogs.length,
           recentQuotes: quotes.slice(0, 5),
-          recentApps: apps.slice(0, 5)
         });
         return;
       }
@@ -350,7 +344,7 @@ export default function UserFriendlyDashboard() {
       }
 
       // Also pre-fetch media list for image select modals
-      if (tab === 'media' || ['hero', 'about', 'company', 'services', 'projects', 'gallery', 'blogs', 'testimonials', 'clients', 'seo', 'settings'].includes(tab)) {
+      if (tab === 'media' || ['hero', 'about', 'company', 'services', 'projects', 'gallery', 'testimonials', 'clients', 'seo', 'settings'].includes(tab)) {
         const mediaRes = await fetch('/api/admin/media');
         if (mediaRes.ok) {
           const mediaData = await mediaRes.json();
@@ -365,6 +359,7 @@ export default function UserFriendlyDashboard() {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     loadTabContent(tab);
+    setIsSidebarOpen(false);
   };
 
   // 3. Logout handler
@@ -699,13 +694,10 @@ export default function UserFriendlyDashboard() {
     { id: 'services', label: 'Services We Offer', icon: Wrench },
     { id: 'projects', label: 'Projects & Works', icon: FolderGit },
     { id: 'gallery', label: 'Photo Gallery', icon: ImageIcon },
-    { id: 'careers', label: 'Career Postings', icon: Briefcase },
-    { id: 'blogs', label: 'News & Blog Articles', icon: FileText },
     { id: 'testimonials', label: 'Client Reviews', icon: MessageSquareQuote },
     { id: 'clients', label: 'Clients & Partners', icon: Users },
     { id: 'contact-settings', label: 'Contact Details', icon: Home },
     { id: 'quotes', label: 'Customer Quote Requests', icon: MailQuestion, badge: singleData.quotesPending },
-    { id: 'applications', label: 'Job Applications', icon: FileBadge2, badge: singleData.appsPending },
     { id: 'media', label: 'Uploaded Images & Files', icon: Upload },
     { id: 'seo', label: 'Google Search (SEO)', icon: Globe },
     { id: 'settings', label: 'Website Settings', icon: Settings },
@@ -713,7 +705,7 @@ export default function UserFriendlyDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white flex font-sans text-sm antialiased">
+    <div className="min-h-screen bg-[#0f172a] text-white flex font-sans text-sm antialiased relative overflow-x-hidden">
       {/* Toast Alert popup */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-6 py-4 rounded-xl shadow-2xl border flex items-center gap-3 animate-bounce ${
@@ -724,8 +716,16 @@ export default function UserFriendlyDashboard() {
         </div>
       )}
 
+      {/* Backdrop for mobile sidebar */}
+      {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden"
+        />
+      )}
+
       {/* LEFT SIDEBAR PANEL: Dark theme layout */}
-      <aside className="w-68 border-r border-[#334155] bg-[#070c18] flex flex-col justify-between shrink-0">
+      <aside className={`fixed inset-y-0 left-0 z-30 w-64 lg:w-68 border-r border-[#334155] bg-[#070c18] flex flex-col justify-between shrink-0 transform transition-transform duration-300 lg:translate-x-0 lg:relative ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           {/* Brand Header */}
           <div className="p-6 border-b border-[#334155] flex items-center gap-3">
@@ -791,11 +791,17 @@ export default function UserFriendlyDashboard() {
       </aside>
 
       {/* RIGHT MAIN PANEL CONTENT SCREEN */}
-      <main className="flex-1 flex flex-col min-w-0 bg-[#0f172a]">
+      <main className="flex-1 flex flex-col min-w-0 bg-[#0f172a] w-full">
         {/* Header toolbar */}
-        <header className="h-16 border-b border-[#334155] bg-[#070c18]/30 px-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-white tracking-wide">
+        <header className="h-16 border-b border-[#334155] bg-[#070c18]/30 px-6 lg:px-8 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-2 bg-[#1e293b] border border-[#334155] rounded-xl lg:hidden text-white cursor-pointer"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <h2 className="text-sm lg:text-base font-extrabold text-white tracking-wide truncate">
               {navItems.find(item => item.id === activeTab)?.label}
             </h2>
           </div>
@@ -829,12 +835,11 @@ export default function UserFriendlyDashboard() {
               </div>
 
               {/* Stat Cards Grid (Large, with icons and simple labels) */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   { label: 'Total Projects & Works Done', val: singleData.projectsCount || 0, icon: FolderGit, color: 'from-blue-650/15 to-blue-500/5 border-blue-500/20 text-blue-400' },
                   { label: 'Services Offered on Website', val: singleData.servicesCount || 0, icon: Wrench, color: 'from-orange-650/15 to-orange-500/5 border-orange-500/20 text-orange-400' },
                   { label: 'Unread Customer Quote Requests', val: singleData.quotesPending || 0, icon: MailQuestion, color: 'from-yellow-650/15 to-yellow-500/5 border-yellow-500/20 text-yellow-400', sub: `${singleData.quotesCount || 0} total requests` },
-                  { label: 'Job Applications Submitted', val: singleData.appsPending || 0, icon: FileBadge2, color: 'from-green-650/15 to-green-500/5 border-green-500/20 text-green-400', sub: `${singleData.appsCount || 0} total applications` },
                 ].map((stat, idx) => {
                   const IconComp = stat.icon;
                   return (
@@ -852,8 +857,8 @@ export default function UserFriendlyDashboard() {
                 })}
               </div>
 
-              {/* Action grid (Recent enquiries & application logs) */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Action grid (Recent enquiries) */}
+              <div className="w-full">
                 {/* Recent Quote Enquiries */}
                 <div className="bg-[#1e293b]/30 border border-[#334155] rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center justify-between border-b border-[#334155] pb-4 mb-4">
@@ -887,43 +892,6 @@ export default function UserFriendlyDashboard() {
                       ))
                     ) : (
                       <p className="text-xs text-slate-500 font-mono text-center py-6">No quote requests received yet.</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Recent Job Applications */}
-                <div className="bg-[#1e293b]/30 border border-[#334155] rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-[#334155] pb-4 mb-4">
-                    <h3 className="font-bold text-xs uppercase tracking-widest text-white flex items-center gap-2">
-                      <FileBadge2 className="w-4 h-4 text-green-500" />
-                      Recent Job Applications
-                    </h3>
-                    <button onClick={() => handleTabChange('applications')} className="text-[10px] font-bold text-[#22c55e] hover:text-green-400 uppercase tracking-wider transition-colors cursor-pointer">
-                      View All
-                    </button>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    {singleData.recentApps && singleData.recentApps.length > 0 ? (
-                      singleData.recentApps.map((app: any) => (
-                        <div key={app._id} className="p-4 rounded-xl bg-[#0f172a]/50 border border-[#334155] flex items-center justify-between hover:border-green-500/30 transition-all">
-                          <div>
-                            <h4 className="font-bold text-xs text-white">{app.name}</h4>
-                            <p className="text-[10px] text-slate-400 mt-0.5">Position: {app.jobTitle}</p>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                              app.status === 'unread' ? 'bg-red-500/10 text-red-405 border border-red-500/20' : 'bg-green-500/10 text-green-405 border border-green-500/20'
-                            }`}>
-                              {app.status === 'unread' ? 'New CV' : 'Read'}
-                            </span>
-                            <span className="text-[9px] font-mono text-slate-500">
-                              {new Date(app.timestamp).toLocaleDateString('en-IN')}
-                            </span>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-xs text-slate-500 font-mono text-center py-6">No applications received yet.</p>
                     )}
                   </div>
                 </div>
@@ -1258,8 +1226,8 @@ export default function UserFriendlyDashboard() {
             </form>
           )}
 
-          {/* TAB CONTENT: CRUD LIST CHUNKS (Services, Projects, Gallery, Careers, Blogs, Testimonials, Clients) */}
-          {['services', 'projects', 'gallery', 'careers', 'blogs', 'testimonials', 'clients'].includes(activeTab) && (
+          {/* TAB CONTENT: CRUD LIST CHUNKS (Services, Projects, Gallery, Testimonials, Clients) */}
+          {['services', 'projects', 'gallery', 'testimonials', 'clients'].includes(activeTab) && (
             <div className="flex flex-col gap-6">
               {/* Toolbar */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1e293b]/30 p-4 border border-[#334155] rounded-xl">
@@ -2278,8 +2246,8 @@ export default function UserFriendlyDashboard() {
                       <input
                         type="number"
                         required
-                        value={formData.displayOrder ?? 0}
-                        onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) })}
+                        value={formData.displayOrder === undefined || formData.displayOrder === null || Number.isNaN(formData.displayOrder) ? '' : formData.displayOrder}
+                        onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value === '' ? 0 : (parseInt(e.target.value) || 0) })}
                         className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
                       />
                       <span className="text-[10px] text-slate-500">Lower numbers appear first on the list. (e.g. 0, 1, 2)</span>
@@ -2570,8 +2538,8 @@ export default function UserFriendlyDashboard() {
                       <input
                         type="number"
                         required
-                        value={formData.displayOrder ?? 0}
-                        onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) })}
+                        value={formData.displayOrder === undefined || formData.displayOrder === null || Number.isNaN(formData.displayOrder) ? '' : formData.displayOrder}
+                        onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value === '' ? 0 : (parseInt(e.target.value) || 0) })}
                         className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
                       />
                     </div>
@@ -3060,8 +3028,8 @@ export default function UserFriendlyDashboard() {
                         min="1"
                         max="5"
                         required
-                        value={formData.rating || 5}
-                        onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
+                        value={formData.rating === undefined || formData.rating === null || Number.isNaN(formData.rating) ? '' : formData.rating}
+                        onChange={(e) => setFormData({ ...formData, rating: e.target.value === '' ? 5 : (parseInt(e.target.value) || 5) })}
                         className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
                       />
                     </div>
@@ -3135,8 +3103,8 @@ export default function UserFriendlyDashboard() {
                       <input
                         type="number"
                         required
-                        value={formData.displayOrder ?? 0}
-                        onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) })}
+                        value={formData.displayOrder === undefined || formData.displayOrder === null || Number.isNaN(formData.displayOrder) ? '' : formData.displayOrder}
+                        onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value === '' ? 0 : (parseInt(e.target.value) || 0) })}
                         className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
                       />
                     </div>

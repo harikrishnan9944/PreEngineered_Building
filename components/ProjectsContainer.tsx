@@ -84,14 +84,24 @@ export default function ProjectsContainer({ initialProjects }: ProjectsContainer
                 >
                   <div className="flex flex-col">
                     {/* Project Hero Image Placeholder/Visual */}
-                    <div className="aspect-[16/10] bg-slate-900 flex flex-col justify-center items-center text-center p-6 relative group-hover:scale-[1.02] transition-transform duration-500 overflow-hidden">
-                      <div className="steel-texture absolute inset-0 opacity-10" />
-                      <span className="text-3xl font-black text-white/5 tracking-wider select-none uppercase mb-2">
-                        {project.category}
-                      </span>
-                      <span className="text-xs font-mono text-slate-400">
-                        {project.client}
-                      </span>
+                    <div className="aspect-[16/10] bg-slate-900 flex flex-col justify-center items-center text-center relative group-hover:scale-[1.02] transition-transform duration-500 overflow-hidden">
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <>
+                          <div className="steel-texture absolute inset-0 opacity-10" />
+                          <span className="text-3xl font-black text-white/5 tracking-wider select-none uppercase mb-2">
+                            {project.category}
+                          </span>
+                          <span className="text-xs font-mono text-slate-400">
+                            {project.client}
+                          </span>
+                        </>
+                      )}
                     </div>
 
                     <div className="p-6">
@@ -154,18 +164,34 @@ export default function ProjectsContainer({ initialProjects }: ProjectsContainer
               </button>
 
               {/* Left Column: Visual Mockup representation / Gallery slides */}
-              <div className="lg:w-1/2 bg-slate-900 relative flex flex-col items-center justify-center min-h-[300px] lg:min-h-0 p-8">
-                <div className="steel-texture absolute inset-0 opacity-15 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent z-10" />
+              <div className="lg:w-1/2 bg-slate-900 relative flex items-center justify-center min-h-[300px] lg:min-h-0 overflow-hidden">
+                {/* Background Image / Slide */}
+                {activeProject.gallery && activeProject.gallery.length > 0 ? (
+                  <img
+                    src={activeProject.gallery[activeImageIdx] || activeProject.image}
+                    alt={activeProject.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : activeProject.image ? (
+                  <img
+                    src={activeProject.image}
+                    alt={activeProject.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="steel-texture absolute inset-0 opacity-15 pointer-events-none" />
+                )}
 
-                <div className="relative z-10 text-center flex flex-col items-center gap-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-slate-950/20 z-10" />
+
+                <div className="relative z-10 text-center flex flex-col items-center gap-3 p-8">
                   <span className="px-3 py-1 bg-industrial-orange text-white rounded text-xs font-bold tracking-widest uppercase">
                     {activeProject.category}
                   </span>
-                  <h3 className="text-xl font-bold uppercase text-white tracking-wide max-w-xs leading-snug">
+                  <h3 className="text-xl font-bold uppercase text-white tracking-wide max-w-xs leading-snug drop-shadow-md">
                     {activeProject.title}
                   </h3>
-                  <p className="text-xs font-mono text-slate-400">
+                  <p className="text-[10px] font-mono text-slate-300 drop-shadow-md">
                     Slide {activeImageIdx + 1} of {activeProject.gallery?.length || 1}
                   </p>
                 </div>

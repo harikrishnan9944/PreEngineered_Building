@@ -10,6 +10,8 @@ import Hero from '@/components/Hero';
 import ContactForm from '@/components/ContactForm';
 import { ArrowUpRight, CheckCircle, MapPin, Phone, Mail, Clock, Award, Shield, Building, Star, Quote } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const heroData = await readJson<HeroData>('hero.json', {
     title: "Engineering Tomorrow's Steel Structures",

@@ -75,15 +75,25 @@ export default function GalleryContainer({ initialItems }: GalleryContainerProps
               onClick={() => handleOpenLightbox(item)}
               className="break-inside-avoid relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-white/5 cursor-pointer group shadow-md"
             >
-              {/* Simulated high-quality industrial layout */}
-              <div className="w-full flex flex-col justify-center items-center p-8 min-h-[160px] text-center relative group-hover:scale-[1.01] transition-transform duration-500">
-                <div className="steel-texture absolute inset-0 opacity-10" />
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">
-                  {item.category}
-                </span>
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider max-w-[180px]">
-                  {item.title}
-                </h3>
+              {/* Simulated high-quality industrial layout / Actual Image */}
+              <div className="w-full relative group-hover:scale-[1.01] transition-transform duration-500 overflow-hidden">
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-auto object-cover max-h-[350px] block"
+                  />
+                ) : (
+                  <div className="w-full flex flex-col justify-center items-center p-8 min-h-[160px] text-center relative">
+                    <div className="steel-texture absolute inset-0 opacity-10" />
+                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">
+                      {item.category}
+                    </span>
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider max-w-[180px]">
+                      {item.title}
+                    </h3>
+                  </div>
+                )}
               </div>
 
               {/* Hover Overlay */}
@@ -119,17 +129,25 @@ export default function GalleryContainer({ initialItems }: GalleryContainerProps
             </button>
 
             {/* Lightbox Slider panel */}
-            <div className="relative w-full max-w-4xl max-h-[70vh] aspect-[16/10] bg-slate-900 rounded-3xl overflow-hidden border border-white/10 z-10 flex flex-col justify-center items-center text-center p-10">
-              <div className="steel-texture absolute inset-0 opacity-15" />
+            <div className="relative w-full max-w-4xl max-h-[70vh] aspect-[16/10] bg-slate-900 rounded-3xl overflow-hidden border border-white/10 z-10 flex flex-col justify-center items-center text-center">
+              {activeItem.image ? (
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.title}
+                  className="absolute inset-0 w-full h-full object-contain z-0"
+                />
+              ) : (
+                <div className="steel-texture absolute inset-0 opacity-15" />
+              )}
               
-              <div className="relative z-10 flex flex-col items-center gap-4">
-                <span className="px-3 py-1 bg-industrial-orange text-white text-[10px] font-bold tracking-widest uppercase rounded">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-10 flex flex-col items-center gap-2 z-10">
+                <span className="px-3 py-1 bg-industrial-orange text-white text-[10px] font-bold tracking-widest uppercase rounded drop-shadow-md">
                   {activeItem.category}
                 </span>
-                <h3 className="text-xl md:text-2xl font-black uppercase text-white tracking-wider max-w-md">
+                <h3 className="text-xl md:text-2xl font-black uppercase text-white tracking-wider max-w-md drop-shadow-md">
                   {activeItem.title}
                 </h3>
-                <p className="text-xs font-mono text-slate-400">
+                <p className="text-xs font-mono text-slate-300 drop-shadow-md">
                   Image {activeImageIdx! + 1} of {filteredItems.length}
                 </p>
               </div>
@@ -137,7 +155,7 @@ export default function GalleryContainer({ initialItems }: GalleryContainerProps
               {/* Slider Left Trigger */}
               <button
                 onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-                className="absolute left-4 p-3 bg-white/5 hover:bg-industrial-orange rounded-xl text-white transition-all cursor-pointer z-20 border border-white/5"
+                className="absolute left-4 p-3 bg-slate-955/65 hover:bg-industrial-orange rounded-xl text-white transition-all cursor-pointer z-20 border border-white/5"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -145,7 +163,7 @@ export default function GalleryContainer({ initialItems }: GalleryContainerProps
               {/* Slider Right Trigger */}
               <button
                 onClick={(e) => { e.stopPropagation(); handleNext(); }}
-                className="absolute right-4 p-3 bg-white/5 hover:bg-industrial-orange rounded-xl text-white transition-all cursor-pointer z-20 border border-white/5"
+                className="absolute right-4 p-3 bg-slate-955/65 hover:bg-industrial-orange rounded-xl text-white transition-all cursor-pointer z-20 border border-white/5"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>

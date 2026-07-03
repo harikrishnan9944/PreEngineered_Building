@@ -6,6 +6,8 @@ import GlowCard from '@/components/ui/GlowCard';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { Shield, Eye, Flame, Award, Building, UserCheck } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const companyData = await readJson<CompanyData>('company.json', {
     name: "Shree Nivi Buildtech",
@@ -81,9 +83,19 @@ export default async function Page() {
           <div className="steel-texture absolute inset-0 opacity-10 rounded-3xl pointer-events-none" />
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
             <div className="lg:col-span-4 flex flex-col items-center text-center lg:text-left lg:items-start gap-4">
-              <div className="w-24 h-24 rounded-full bg-industrial-orange/15 text-industrial-orange flex items-center justify-center text-3xl font-black border border-industrial-orange/30">
-                {companyData.mdName.charAt(0)}
-              </div>
+              {companyData.mdImage ? (
+                <div className="w-24 h-24 rounded-full border-2 border-industrial-orange/50 overflow-hidden relative shadow-lg">
+                  <img
+                    src={companyData.mdImage}
+                    alt={companyData.mdName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-industrial-orange/15 text-industrial-orange flex items-center justify-center text-3xl font-black border border-industrial-orange/30">
+                  {companyData.mdName.charAt(0)}
+                </div>
+              )}
               <div>
                 <h3 className="text-xl font-bold uppercase text-slate-900 dark:text-white tracking-wide">
                   {companyData.mdName}

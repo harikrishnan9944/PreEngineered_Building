@@ -26,8 +26,8 @@ export async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 3000,
-      connectTimeoutMS: 3000,
+      serverSelectionTimeoutMS: 15000, // 15 seconds timeout
+      connectTimeoutMS: 15000,         // 15 seconds timeout
     };
 
 

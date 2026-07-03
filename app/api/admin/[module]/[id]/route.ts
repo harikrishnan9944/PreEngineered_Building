@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import * as models from '@/models/schemas';
 import { getAdminFromRequest } from '@/lib/auth';
+import { deleteFromCloudinary, getPublicIdFromUrl } from '@/lib/cloudinary';
 
 function getModel(moduleName: string) {
   switch (moduleName) {
@@ -96,18 +97,24 @@ export async function DELETE(
       return NextResponse.json({ error: 'Document not found.' }, { status: 404 });
     }
 
-    // Custom handling for deleting media files from disk
+    // Custom handling for deleting media files from Cloudinary/Disk
     if (moduleName === 'media') {
       try {
-        const fileUrl = doc.url;
-        if (fileUrl && fileUrl.startsWith('/uploads/')) {
-          const filePath = path.join(process.cwd(), 'public', fileUrl);
-          await fs.unlink(filePath).catch(() => {
-            console.warn(`[Media Clean] Could not delete physical file: ${filePath}`);
-          });
+        const publicId = doc.publicId || (doc.url ? getPublicIdFromUrl(doc.url) : null);
+        if (publicId) {
+          await deleteFromCloudinary(publicId);
+        } else {
+          // Fallback for older local files
+          const fileUrl = doc.url;
+          if (fileUrl && fileUrl.startsWith('/uploads/')) {
+            const filePath = path.join(process.cwd(), 'public', fileUrl);
+            await fs.unlink(filePath).catch(() => {
+              console.warn(`[Media Clean] Could not delete physical file: ${filePath}`);
+            });
+          }
         }
       } catch (err) {
-        console.error('Error deleting media file from disk:', err);
+        console.error('Error deleting media file:', err);
       }
     }
 

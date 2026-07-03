@@ -4,6 +4,7 @@ import path from 'path';
 import { connectToDatabase } from '@/lib/mongodb';
 import * as models from '@/models/schemas';
 import { getAdminFromRequest } from '@/lib/auth';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 function getModelConfig(moduleName: string) {
   switch (moduleName) {
@@ -82,30 +83,28 @@ export async function POST(
           return NextResponse.json({ error: 'No files provided.' }, { status: 400 });
         }
 
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        await fs.mkdir(uploadDir, { recursive: true });
-
-        const uploadedMedia = [];
-        for (const file of files) {
-          if (!file.name) continue;
-          
-          const ext = file.name.split('.').pop() || 'png';
-          const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
-          const filePath = path.join(uploadDir, filename);
+        const uploadPromises = files.map(async (file) => {
+          if (!file.name) return null;
           
           const arrayBuffer = await file.arrayBuffer();
-          await fs.writeFile(filePath, Buffer.from(arrayBuffer));
+          const buffer = Buffer.from(arrayBuffer);
           
-          const mediaUrl = `/uploads/${filename}`;
+          // Upload to Cloudinary
+          const uploadResult = await uploadToCloudinary(buffer, 'preengineered_building', file.name);
+          
           const mediaDoc = await models.Media.create({
             filename: file.name,
-            url: mediaUrl,
+            url: uploadResult.secure_url,
+            publicId: uploadResult.public_id,
             size: file.size,
             type: file.type,
             uploadDate: new Date()
           });
-          uploadedMedia.push(mediaDoc);
-        }
+          return mediaDoc;
+        });
+
+        const results = await Promise.all(uploadPromises);
+        const uploadedMedia = results.filter((doc) => doc !== null);
 
         return NextResponse.json({ success: true, media: uploadedMedia });
       } catch (err: any) {

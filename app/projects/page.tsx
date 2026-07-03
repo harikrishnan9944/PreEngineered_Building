@@ -9,6 +9,8 @@ export const metadata = {
   description: 'Explore our completed portfolio of factory structures, storage warehouses, clean rooms, cold storage chambers, and heavy engineering buildings.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const projects = await readJson<ProjectData[]>('projects.json', []);
 

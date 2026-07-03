@@ -201,6 +201,7 @@ const SeoSettingSchema = new Schema({
 const MediaSchema = new Schema({
   filename: { type: String, required: true },
   url: { type: String, required: true },
+  publicId: { type: String },
   size: { type: Number },
   type: { type: String },
   uploadDate: { type: Date, default: Date.now }
