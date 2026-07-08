@@ -6,7 +6,7 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata = {
   title: 'Engineering Services',
-  description: 'Explore our 14 premium industrial services including Pre-Engineered Buildings, Structural Steel, Warehouse Construction, and Heavy Fabrication.',
+  description: 'Explore our premium industrial services including Pre-Engineered Buildings, Structural Steel, Warehouse Construction, and Heavy Fabrication.',
 };
 
 export const dynamic = 'force-dynamic';

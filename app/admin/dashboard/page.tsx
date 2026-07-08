@@ -328,7 +328,7 @@ export default function UserFriendlyDashboard() {
       }
 
       // Check single doc tabs
-      const isSingleDoc = ['hero', 'about', 'company', 'seo', 'settings', 'contact-settings', 'profile'].includes(tab);
+      const isSingleDoc = ['hero', 'about', 'company', 'settings', 'contact-settings', 'profile'].includes(tab);
       const url = isSingleDoc 
         ? (tab === 'profile' ? '/api/admin/auth/me' : `/api/admin/${tab}`)
         : `/api/admin/${tab}`;
@@ -344,7 +344,7 @@ export default function UserFriendlyDashboard() {
       }
 
       // Also pre-fetch media list for image select modals
-      if (tab === 'media' || ['hero', 'about', 'company', 'services', 'projects', 'gallery', 'testimonials', 'clients', 'seo', 'settings'].includes(tab)) {
+      if (tab === 'media' || ['hero', 'about', 'company', 'services', 'projects', 'gallery', 'testimonials', 'settings'].includes(tab)) {
         const mediaRes = await fetch('/api/admin/media');
         if (mediaRes.ok) {
           const mediaData = await mediaRes.json();
@@ -695,11 +695,9 @@ export default function UserFriendlyDashboard() {
     { id: 'projects', label: 'Projects & Works', icon: FolderGit },
     { id: 'gallery', label: 'Photo Gallery', icon: ImageIcon },
     { id: 'testimonials', label: 'Client Reviews', icon: MessageSquareQuote },
-    { id: 'clients', label: 'Clients & Partners', icon: Users },
     { id: 'contact-settings', label: 'Contact Details', icon: Home },
     { id: 'quotes', label: 'Customer Quote Requests', icon: MailQuestion, badge: singleData.quotesPending },
     { id: 'media', label: 'Uploaded Images & Files', icon: Upload },
-    { id: 'seo', label: 'Google Search (SEO)', icon: Globe },
     { id: 'settings', label: 'Website Settings', icon: Settings },
     { id: 'profile', label: 'My Profile Settings', icon: User },
   ];
@@ -905,6 +903,31 @@ export default function UserFriendlyDashboard() {
               <div>
                 <h3 className="font-bold text-sm uppercase tracking-wide text-[#f97316]">Edit Home Page Banner Text & Banner Image</h3>
                 <p className="text-xs text-slate-400 mt-1">This banner appears at the very top of your home page.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-[#334155] pb-6 mb-2">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs text-slate-200 font-bold uppercase text-[#f97316]">Website Logo Brand Text / Title</label>
+                  <input
+                    type="text"
+                    required
+                    value={singleData.logoText || ''}
+                    placeholder="SHREE NIVI BUILDTECH"
+                    onChange={(e) => setSingleData({ ...singleData, logoText: e.target.value })}
+                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-bold"
+                  />
+                  <span className="text-[10px] text-slate-500">The main brand text displayed in the header and footer.</span>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs text-slate-200 font-bold uppercase text-[#f97316]">Website Logo Image (Replaces Default Icon)</label>
+                  <ImageUploadZone
+                    value={singleData.logoUrl || ''}
+                    onChange={(url) => setSingleData({ ...singleData, logoUrl: url })}
+                    onOpenMedia={() => openMediaSelector('logoUrl', 'single')}
+                  />
+                  <span className="text-[10px] text-slate-500">Upload a custom logo image (replaces default construction icon).</span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1226,8 +1249,8 @@ export default function UserFriendlyDashboard() {
             </form>
           )}
 
-          {/* TAB CONTENT: CRUD LIST CHUNKS (Services, Projects, Gallery, Testimonials, Clients) */}
-          {['services', 'projects', 'gallery', 'testimonials', 'clients'].includes(activeTab) && (
+          {/* TAB CONTENT: CRUD LIST CHUNKS (Services, Projects, Gallery, Testimonials) */}
+          {['services', 'projects', 'gallery', 'testimonials'].includes(activeTab) && (
             <div className="flex flex-col gap-6">
               {/* Toolbar */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1e293b]/30 p-4 border border-[#334155] rounded-xl">
@@ -1306,12 +1329,7 @@ export default function UserFriendlyDashboard() {
                           <th className="p-4">Rating Stars</th>
                         </>
                       )}
-                      {activeTab === 'clients' && (
-                        <>
-                          <th className="p-4">Industry Segment</th>
-                          <th className="p-4">Sort Order</th>
-                        </>
-                      )}
+
                       <th className="p-4 text-center">Status</th>
                       <th className="p-4 text-right">Edit/Delete Actions</th>
                     </tr>
@@ -1371,12 +1389,7 @@ export default function UserFriendlyDashboard() {
                               </td>
                             </>
                           )}
-                          {activeTab === 'clients' && (
-                            <>
-                              <td className="p-4">{item.industry || 'Steel Fabrication'}</td>
-                              <td className="p-4 font-mono">{item.displayOrder}</td>
-                            </>
-                          )}
+
 
                           <td className="p-4 text-center">
                             <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
@@ -1872,104 +1885,7 @@ export default function UserFriendlyDashboard() {
             </form>
           )}
 
-          {/* TAB CONTENT: 8. SEO SETTINGS FORM */}
-          {activeTab === 'seo' && (
-            <form onSubmit={saveSingleDocSettings} className="bg-[#1e293b]/30 border border-[#334155] rounded-2xl p-8 max-w-4xl flex flex-col gap-6">
-              <div>
-                <h3 className="font-bold text-sm uppercase tracking-wide text-[#f97316]">Edit Google Search (SEO) & Web Analytics</h3>
-                <p className="text-xs text-slate-400 mt-1">This manages how your website title, description, and keywords look on Google search results.</p>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">Google Search Results Title</label>
-                  <input
-                    type="text"
-                    required
-                    value={singleData.title || ''}
-                    placeholder="Shree Nivi Buildtech | PEB & Steel Structure Engineering"
-                    onChange={(e) => setSingleData({ ...singleData, title: e.target.value })}
-                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs"
-                  />
-                  <span className="text-[10px] text-slate-500">Character Count: {(singleData.title || '').length} (Keep under 60 characters)</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">WhatsApp & Social Share Preview Photo</label>
-                  <ImageUploadZone
-                    value={singleData.ogImage || ''}
-                    onChange={(url) => setSingleData({ ...singleData, ogImage: url })}
-                    onOpenMedia={() => openMediaSelector('ogImage', 'single')}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">Google Search Results Description</label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={singleData.description || ''}
-                    placeholder="Type the search description..."
-                    onChange={(e) => setSingleData({ ...singleData, description: e.target.value })}
-                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs resize-none"
-                  />
-                  <span className="text-[10px] text-slate-500">Character Count: {(singleData.description || '').length} (Keep under 160 characters)</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">Search Keywords (Separated by commas)</label>
-                  <textarea
-                    rows={4}
-                    value={singleData.keywords || ''}
-                    placeholder="PEB construction, Steel Fabricators, Chennai..."
-                    onChange={(e) => setSingleData({ ...singleData, keywords: e.target.value })}
-                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs resize-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-[#334155] pt-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">Google Analytics Tracking ID (Optional)</label>
-                  <input
-                    type="text"
-                    value={singleData.analyticsCode || ''}
-                    placeholder="e.g. G-XXXXXXX"
-                    onChange={(e) => setSingleData({ ...singleData, analyticsCode: e.target.value })}
-                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-slate-200 font-bold uppercase">Google Search Console Verification Code</label>
-                  <input
-                    type="text"
-                    value={singleData.searchConsoleCode || ''}
-                    placeholder="Paste verification HTML tag content..."
-                    onChange={(e) => setSingleData({ ...singleData, searchConsoleCode: e.target.value })}
-                    className="px-4 py-3 rounded-xl border border-[#334155] bg-[#0f172a]/70 outline-none focus:border-[#f97316] text-white text-xs font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between border-t border-[#334155] pt-6 mt-4">
-                <button
-                  type="button"
-                  onClick={() => loadTabContent('seo')}
-                  className="px-5 py-3.5 bg-slate-800 hover:bg-slate-750 text-slate-350 text-xs font-bold uppercase rounded-xl transition-all cursor-pointer"
-                >
-                  Cancel / Revert Changes
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-8 py-4 bg-[#f97316] hover:bg-[#ea580c] disabled:opacity-50 text-white font-bold rounded-xl shadow-lg transition-all uppercase tracking-wider text-xs flex items-center justify-center gap-2 cursor-pointer active:translate-y-0.5"
-                >
-                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : '💾 Save Changes'}
-                </button>
-              </div>
-            </form>
-          )}
 
           {/* TAB CONTENT: 9. WEBSITE SETTINGS */}
           {activeTab === 'settings' && (
@@ -3049,79 +2965,7 @@ export default function UserFriendlyDashboard() {
                 </>
               )}
 
-              {/* clients Form FIELDS */}
-              {activeTab === 'clients' && (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Partner Client Company Name</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. L&T Construction"
-                        value={formData.name || ''}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Industry Segment</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Heavy Fabrication, PEB Construction"
-                        value={formData.industry || ''}
-                        onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                        className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Partner Logo Photo</label>
-                      <ImageUploadZone
-                        value={formData.logo || ''}
-                        onChange={(url) => setFormData({ ...formData, logo: url })}
-                        onOpenMedia={() => openMediaSelector('logo')}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Partner Website URL Link</label>
-                      <input
-                        type="text"
-                        value={formData.website || '#'}
-                        placeholder="https://..."
-                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                        className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316] font-mono"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Display Sort Order</label>
-                      <input
-                        type="number"
-                        required
-                        value={formData.displayOrder === undefined || formData.displayOrder === null || Number.isNaN(formData.displayOrder) ? '' : formData.displayOrder}
-                        onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value === '' ? 0 : (parseInt(e.target.value) || 0) })}
-                        className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-white outline-none focus:border-[#f97316]"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-200 uppercase tracking-widest">Show or Hide logo</label>
-                      <select
-                        value={formData.status || 'active'}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="px-4 py-2.5 rounded-lg border border-[#334155] bg-[#0f172a]/70 text-[#cbd5e1] outline-none focus:border-[#f97316]"
-                      >
-                        <option value="active">Live (Show)</option>
-                        <option value="inactive">Hidden (Draft)</option>
-                      </select>
-                    </div>
-                  </div>
-                </>
-              )}
 
               {/* Submit Buttons */}
               <div className="flex gap-3 justify-end border-t border-[#334155] pt-4 mt-4">

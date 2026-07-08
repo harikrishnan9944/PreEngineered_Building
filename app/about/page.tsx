@@ -178,40 +178,6 @@ export default async function Page() {
           </div>
         )}
 
-        {/* Company Journey Milestones Timeline */}
-        {companyData.journeyTimeline.length > 0 && (
-          <div>
-            <div className="text-center max-w-xl mx-auto mb-16">
-              <span className="text-sm font-bold text-industrial-orange uppercase tracking-widest block mb-2">
-                25 Year Legacy
-              </span>
-              <h2 className="text-3xl font-black uppercase text-slate-900 dark:text-white">
-                Our Company Journey
-              </h2>
-            </div>
-
-            <div className="relative border-l-2 border-slate-200 dark:border-white/5 pl-8 max-w-4xl mx-auto flex flex-col gap-12">
-              {companyData.journeyTimeline.map((item, i) => (
-                <ScrollReveal key={i} variant="slide-up" className="relative group">
-                  {/* Timeline bullet tag */}
-                  <span className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full border-4 border-white dark:border-[#08090d] bg-industrial-orange scale-100 group-hover:scale-120 transition-transform duration-300 shadow-md shadow-industrial-orange/50" />
-                  
-                  <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-mono font-black text-industrial-orange">
-                      {item.year}
-                    </span>
-                    <h3 className="text-lg font-bold uppercase text-slate-900 dark:text-white tracking-wide">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-slate-555 dark:text-slate-400 leading-relaxed font-medium">
-                      {item.description}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

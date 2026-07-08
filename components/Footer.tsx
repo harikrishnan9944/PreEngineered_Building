@@ -2,12 +2,36 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Construction, Mail, ArrowUp, Phone, MapPin, Clock, MessageSquare } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  logoText?: string;
+  logoUrl?: string;
+  footerDescription?: string;
+  copyrightText?: string;
+}
+
+export default function Footer({
+  logoText = "SHREE NIVI BUILDTECH",
+  logoUrl = "",
+  footerDescription = "Leading the steel construction sector for over 25 years. We design, fabricate, and erect high-grade pre-engineered buildings and heavy industrial structures.",
+  copyrightText
+}: FooterProps) {
+  const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
+  const words = logoText.trim().split(/\s+/);
+  const highlightPart = words.length > 1 ? words[words.length - 1] : '';
+  const mainPart = words.length > 1 ? words.slice(0, -1).join(' ') + ' ' : logoText;
+
+  const activeCopyrightText = copyrightText || `© ${new Date().getFullYear()} Shree Nivi Buildtech. All rights reserved.`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,15 +64,24 @@ export default function Footer() {
           {/* Column 1: Brand details */}
           <div className="flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="p-2 rounded bg-industrial-orange text-white transform group-hover:rotate-6 transition-transform shadow-3d-orange/30">
-                <Construction className="w-5 h-5" />
-              </div>
+              {logoUrl ? (
+                <div className="w-12 h-12 relative overflow-hidden flex items-center justify-center shrink-0 rounded-full">
+                  <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                </div>
+              ) : (
+                <div className="p-2 rounded bg-industrial-orange text-white transform group-hover:rotate-6 transition-transform shadow-3d-orange/30">
+                  <Construction className="w-5 h-5" />
+                </div>
+              )}
               <span className="font-sans font-black tracking-widest text-lg text-slate-900 dark:text-white">
-                SHREE NIVI <span className="text-industrial-orange font-normal">BUILDTECH</span>
+                {mainPart}
+                {highlightPart && (
+                  <span className="text-industrial-orange font-normal">{highlightPart}</span>
+                )}
               </span>
             </Link>
-            <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-450">
-              Leading the steel construction sector for over 25 years. We design, fabricate, and erect high-grade pre-engineered buildings and heavy industrial structures.
+            <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-455">
+              {footerDescription}
             </p>
             {/* Social icons */}
             <div className="flex items-center gap-3">
@@ -164,7 +197,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between border-t border-slate-200 dark:border-white/5 pt-8 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Shree Nivi Buildtech. All rights reserved.</p>
+          <p>{activeCopyrightText}</p>
           <div className="flex items-center gap-6 mt-4 md:mt-0">
             <Link href="/about" className="hover:text-industrial-orange">Privacy Policy</Link>
             <Link href="/contact" className="hover:text-industrial-orange">Terms of Service</Link>

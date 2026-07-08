@@ -7,6 +7,10 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env');
 }
 
+if (!MONGODB_URI.startsWith('mongodb://') && !MONGODB_URI.startsWith('mongodb+srv://')) {
+  throw new Error(`Invalid MONGODB_URI scheme in environment variables. Got: "${MONGODB_URI}". Expected it to start with "mongodb://" or "mongodb+srv://"`);
+}
+
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections growing exponentially

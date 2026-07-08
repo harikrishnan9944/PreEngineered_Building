@@ -13,6 +13,8 @@ export interface HeroData {
   videoUrl: string;
   imageUrl: string;
   stats: StatItem[];
+  logoText?: string;
+  logoUrl?: string;
 }
 
 export interface CoreValue {

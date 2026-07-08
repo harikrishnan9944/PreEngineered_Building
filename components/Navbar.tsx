@@ -16,11 +16,24 @@ const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  logoText?: string;
+  logoUrl?: string;
+}
+
+export default function Navbar({ logoText = "SHREE NIVI BUILDTECH", logoUrl = "" }: NavbarProps) {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
+  const words = logoText.trim().split(/\s+/);
+  const highlightPart = words.length > 1 ? words[words.length - 1] : '';
+  const mainPart = words.length > 1 ? words.slice(0, -1).join(' ') + ' ' : logoText;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,11 +59,20 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="p-2 rounded bg-industrial-orange text-white transform group-hover:rotate-6 transition-transform duration-300 shadow-3d-orange/30 shadow-sm">
-            <Construction className="w-6 h-6" />
-          </div>
+          {logoUrl ? (
+            <div className="w-16 h-16 relative overflow-hidden flex items-center justify-center shrink-0 rounded-full">
+              <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+            </div>
+          ) : (
+            <div className="p-2 rounded bg-industrial-orange text-white transform group-hover:rotate-6 transition-transform duration-300 shadow-3d-orange/30 shadow-sm">
+              <Construction className="w-6 h-6" />
+            </div>
+          )}
           <span className="font-sans font-black tracking-widest text-lg md:text-xl text-slate-900 dark:text-white group-hover:text-industrial-orange transition-colors">
-            SHREE NIVI <span className="text-industrial-orange font-normal">BUILDTECH</span>
+            {mainPart}
+            {highlightPart && (
+              <span className="text-industrial-orange font-normal">{highlightPart}</span>
+            )}
           </span>
         </Link>
 

@@ -4,6 +4,9 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { readJson } from "@/lib/fs";
+
+export const dynamic = 'force-dynamic';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,11 +73,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await readJson<any>('settings.json', {
+    logoText: 'SHREE NIVI BUILDTECH',
+    logoUrl: '',
+    faviconUrl: '/favicon.ico',
+    loaderUrl: '',
+    footerDescription: 'Leading the steel construction sector for over 25 years. We design, fabricate, and erect high-grade pre-engineered buildings and heavy industrial structures.',
+    copyrightText: '© 2026 Shree Nivi Buildtech. All rights reserved.'
+  });
+
+  const heroSettings = await readJson<any>('hero.json', {
+    logoText: '',
+    logoUrl: '',
+  } as any);
+
+  const activeLogoText = heroSettings.logoText || settings.logoText;
+  const activeLogoUrl = heroSettings.logoUrl || settings.logoUrl;
+
   return (
     <html
       lang="en"
@@ -84,7 +104,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col antialiased bg-white dark:bg-[#08090d] text-slate-900 dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider>
           {/* Main website header */}
-          <Navbar />
+          <Navbar logoText={activeLogoText} logoUrl={activeLogoUrl} />
           
           {/* Page content wrapper */}
           <main className="flex-grow w-full relative">
@@ -92,7 +112,12 @@ export default function RootLayout({
           </main>
 
           {/* Main website footer */}
-          <Footer />
+          <Footer
+            logoText={activeLogoText}
+            logoUrl={activeLogoUrl}
+            footerDescription={settings.footerDescription}
+            copyrightText={settings.copyrightText}
+          />
         </ThemeProvider>
       </body>
     </html>

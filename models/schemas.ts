@@ -19,7 +19,9 @@ const HeroSchema = new Schema({
   ctaLink2: { type: String },
   videoUrl: { type: String },
   imageUrl: { type: String },
-  stats: [{ value: String, label: String }]
+  stats: [{ value: String, label: String }],
+  logoText: { type: String },
+  logoUrl: { type: String }
 }, { timestamps: true });
 
 // 3. Company (About)
@@ -219,6 +221,9 @@ const WebsiteSettingSchema = new Schema({
 
 // Register models
 export const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
+if (mongoose.models.Hero) {
+  delete mongoose.models.Hero;
+}
 export const Hero = mongoose.models.Hero || mongoose.model('Hero', HeroSchema);
 export const Company = mongoose.models.Company || mongoose.model('Company', CompanySchema);
 export const Service = mongoose.models.Service || mongoose.model('Service', ServiceSchema);

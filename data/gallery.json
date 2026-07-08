@@ -61,5 +61,40 @@
     "category": "Erection",
     "image": "/images/gallery/gal9.jpg",
     "size": "medium"
+  },
+  {
+    "id": "gal-badminton-exterior",
+    "title": "Indoor Sports Complex External View",
+    "category": "Erection",
+    "image": "/images/uploads/badminton_court_exterior.jpg",
+    "size": "medium"
+  },
+  {
+    "id": "gal-badminton-interior-1",
+    "title": "Indoor Badminton Arena Court A",
+    "category": "Factory",
+    "image": "/images/uploads/badminton_court_1.jpg",
+    "size": "large"
+  },
+  {
+    "id": "gal-badminton-interior-2",
+    "title": "Indoor Badminton Arena Court B",
+    "category": "Factory",
+    "image": "/images/uploads/badminton_court_2.jpg",
+    "size": "medium"
+  },
+  {
+    "id": "gal-peb-warehouse-1",
+    "title": "Industrial PEB Warehouse Erection",
+    "category": "Warehouse",
+    "image": "/images/uploads/peb_warehouse_exterior_1.jpg",
+    "size": "large"
+  },
+  {
+    "id": "gal-peb-warehouse-2",
+    "title": "Finished Industrial PEB Facility",
+    "category": "Warehouse",
+    "image": "/images/uploads/peb_warehouse_exterior_2.jpg",
+    "size": "medium"
   }
 ]
